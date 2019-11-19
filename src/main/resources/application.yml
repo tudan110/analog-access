@@ -1,0 +1,3 @@
+schedule:
+  initialDelayString: 1000
+  fixedDelayString: 3600000
