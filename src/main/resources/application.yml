@@ -1,3 +1,3 @@
 schedule:
   initialDelayString: 1000
-  fixedDelayString: 3600000
+  fixedDelayString: 1200000

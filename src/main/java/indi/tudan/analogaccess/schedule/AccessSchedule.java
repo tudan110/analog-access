@@ -20,6 +20,6 @@ public class AccessSchedule {
     public void access() {
 
         log.info("执行定时访问。");
-//        AnalogAccess.builder().build().process();
+        AnalogAccess.builder().build().process();
     }
 }
