@@ -1,3 +1,8 @@
+# 定时器配置
 schedule:
-  initialDelayString: 1000
+  initialDelayString: 500
   fixedDelayString: 1200000
+
+# 系统配置
+server:
+  port: 8888
