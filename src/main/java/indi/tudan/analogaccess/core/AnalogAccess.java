@@ -32,7 +32,9 @@ public class AnalogAccess {
         // https://tudan.blog.csdn.net/article/list/2?
 //        List<String> urlList = CollUtil.newArrayList("https://tudan.blog.csdn.net/article/list/1?");
 
-        List<String> urlList = CollUtil.newArrayList("https://tudan.blog.csdn.net/article/details/103079575",
+        List<String> urlList = CollUtil.newArrayList(
+                "https://tudan.blog.csdn.net/article/details/103162195",
+                "https://tudan.blog.csdn.net/article/details/103079575",
                 "https://tudan.blog.csdn.net/article/details/103064258",
                 "https://tudan.blog.csdn.net/article/details/103027650",
                 "https://tudan.blog.csdn.net/article/details/102882755",
