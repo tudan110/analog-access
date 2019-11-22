@@ -30,4 +30,4 @@ schedule:
 
 # 系统配置
 server:
-  port: 8887
+  port: 8888
