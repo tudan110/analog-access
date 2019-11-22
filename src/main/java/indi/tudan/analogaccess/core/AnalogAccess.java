@@ -6,6 +6,7 @@ import cn.hutool.http.HttpUtil;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Tolerate;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
  */
 @Data
 @Builder
+@Slf4j
 public class AnalogAccess {
 
     private String blogPageUrl;
@@ -88,7 +90,11 @@ public class AnalogAccess {
 
         List<String> pageUrlList = new ArrayList<>();
         for (int i = 0; i < pageNum; i++) {
-            pageUrlList.add(StrUtil.format(listUrlTemplate, i + 1));
+
+            String pageUrl = StrUtil.format(listUrlTemplate, i + 1);
+            pageUrlList.add(pageUrl);
+
+            log.info("分页页面链接 {}: {}", i + 1, pageUrl);
         }
 
         return pageUrlList;
@@ -133,6 +139,8 @@ public class AnalogAccess {
 
             // 添加到待文章链接数组中
             articleUrlList.add(articleUrl);
+
+            log.info("文章链接 {}: {}", i + 1, articleUrl);
         }
 
         return articleUrlList;
