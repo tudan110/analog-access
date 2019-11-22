@@ -10,7 +10,7 @@ csdn:
     # 博客主页地址
     url: https://tudan.blog.csdn.net
     # 分页链接模板
-    listUrlTemplate: https://tudan.blog.csdn.net/article/list/{}?
+    listUrlTemplate: ${csdn.blogPage.url}/article/list/{}?
     # 匹配 pageSize，前置特殊字符串
     pageSizeStart: pageSize
     # 匹配 listTotal，前置特殊字符串
