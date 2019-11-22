@@ -1,11 +1,13 @@
 package indi.tudan.analogaccess.core;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.Console;
+import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import lombok.Builder;
 import lombok.Data;
+import lombok.experimental.Tolerate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +21,28 @@ import java.util.List;
 @Builder
 public class AnalogAccess {
 
+    private String blogPageUrl;
+
+    private String listUrlTemplate;
+
+    private String pageSizeStart;
+
+    private String listTotalStart;
+
+    private String listTotalEnd;
+
+    private String articleOriginalStart;
+
+    private String articleOriginalEnd;
+
+    private String articleIdentificationStart;
+
+    private String articleIdentificationEnd;
+
+    @Tolerate
+    public AnalogAccess() {
+    }
+
     /**
      * 访问
      *
@@ -26,41 +50,91 @@ public class AnalogAccess {
      */
     public void process() {
 
-        // 根据这个匹配
-        // class="article-item-box csdn-tracking-statistics"
-        // https://tudan.blog.csdn.net/article/list/1?
-        // https://tudan.blog.csdn.net/article/list/2?
-//        List<String> urlList = CollUtil.newArrayList("https://tudan.blog.csdn.net/article/list/1?");
+        // 获取分页页面 Url
+        List<String> pageUrlList = getPageUrls();
 
-        List<String> urlList = CollUtil.newArrayList(
-                "https://tudan.blog.csdn.net/article/details/103162195",
-                "https://tudan.blog.csdn.net/article/details/103079575",
-                "https://tudan.blog.csdn.net/article/details/103064258",
-                "https://tudan.blog.csdn.net/article/details/103027650",
-                "https://tudan.blog.csdn.net/article/details/102882755",
-                "https://tudan.blog.csdn.net/article/details/102859236",
-                "https://tudan.blog.csdn.net/article/details/102842328",
-                "https://tudan.blog.csdn.net/article/details/102619001",
-                "https://tudan.blog.csdn.net/article/details/102556410",
-                "https://tudan.blog.csdn.net/article/details/102555391",
-                "https://tudan.blog.csdn.net/article/details/102550184",
-                "https://tudan.blog.csdn.net/article/details/102504615",
-                "https://tudan.blog.csdn.net/article/details/102383306",
-                "https://tudan.blog.csdn.net/article/details/101015061",
-                "https://tudan.blog.csdn.net/article/details/101013279",
-                "https://tudan.blog.csdn.net/article/details/100983953",
-                "https://tudan.blog.csdn.net/article/details/100983841",
-                "https://tudan.blog.csdn.net/article/details/100983445",
-                "https://tudan.blog.csdn.net/article/details/100983063",
-                "https://tudan.blog.csdn.net/article/details/100880730",
-                "https://tudan.blog.csdn.net/article/details/100739994",
-                "https://tudan.blog.csdn.net/article/details/100214799",
-                "https://tudan.blog.csdn.net/article/details/98060926"
-        );
+        pageUrlList.forEach(pageUrl -> {
 
-        urlList.forEach(HttpUtil::get);
-        /*urlList.forEach(p -> {
-            Console.log(HttpUtil.get(p));
-        });*/
+            // 获取文章链接
+            List<String> articleUrlList = getArticleUrls(pageUrl);
+
+            // 访问文章
+            articleUrlList.forEach(HttpUtil::get);
+        });
+
+    }
+
+    /**
+     * 返回分页页面链接
+     *
+     * @return 页面链接数组
+     * @date 2019-11-22 15:15:43
+     */
+    private List<String> getPageUrls() {
+
+        // 获取页面内容
+        String htmlContent = HttpUtil.get(blogPageUrl);
+
+        int pageSizeIndex = htmlContent.indexOf(pageSizeStart);
+        int listTotalIndex = htmlContent.indexOf(listTotalStart);
+        int pageQueryStrIndex = htmlContent.indexOf(listTotalEnd);
+
+        String pageSizeStr = htmlContent.substring(pageSizeIndex, listTotalIndex);
+        String listTotalStr = htmlContent.substring(listTotalIndex, pageQueryStrIndex);
+
+        int pageSize = ReUtil.getFirstNumber(pageSizeStr);
+        int listTotal = ReUtil.getFirstNumber(listTotalStr);
+        int pageNum = listTotal / pageSize + 1;
+
+        List<String> pageUrlList = new ArrayList<>();
+        for (int i = 0; i < pageNum; i++) {
+            pageUrlList.add(StrUtil.format(listUrlTemplate, i + 1));
+        }
+
+        return pageUrlList;
+    }
+
+    /**
+     * 获取文章链接
+     *
+     * @param pageUrl 分页页面链接
+     * @return 文章链接数组
+     * @date 2019-11-22 15:29:52
+     */
+    private List<String> getArticleUrls(String pageUrl) {
+
+        // 文章链接数组
+        List<String> articleUrlList = new ArrayList<>();
+
+        // 获取页面内容
+        String htmlContent = HttpUtil.get(pageUrl);
+
+        // 计算当前页，有多少篇文章
+        int articleNum = ReUtil.count(articleOriginalStart, htmlContent);
+
+        for (int i = 0; i < articleNum; i++) {
+
+            // 1、粗略匹配
+            int startIndex = htmlContent.indexOf(articleOriginalStart);
+            int endIndex = htmlContent.indexOf(articleOriginalEnd);
+
+            // 得到粗略内容
+            String originalStr = htmlContent.substring(startIndex, endIndex);
+
+            // 2、精确匹配
+            int articleStartIndex = originalStr.indexOf(articleIdentificationStart);
+            int articleEndIndex = originalStr.indexOf(articleIdentificationEnd);
+
+            // 精确匹配内容
+            String articleUrl = originalStr.substring(articleStartIndex + 9, articleEndIndex);
+
+            // 剔除已经匹配过的内容
+            htmlContent = htmlContent.substring(endIndex + articleOriginalEnd.length());
+
+            // 添加到待文章链接数组中
+            articleUrlList.add(articleUrl);
+        }
+
+        return articleUrlList;
     }
 }
