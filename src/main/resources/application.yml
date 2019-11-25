@@ -26,7 +26,7 @@ csdn:
 # 定时器配置
 schedule:
   initialDelayString: 0
-  fixedDelayString: 600000
+  fixedDelayString: 60000
 
 # 系统配置
 server:
