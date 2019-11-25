@@ -1,9 +1,7 @@
 package indi.tudan.analogaccess.schedule;
 
-import indi.tudan.analogaccess.core.AnalogAccess;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -44,7 +42,7 @@ public class AccessSchedule {
     @Value("${csdn.article.identification.end}")
     private String articleIdentificationEnd;
 
-    @Scheduled(initialDelayString = "${schedule.initialDelayString}", fixedDelayString = "${schedule.fixedDelayString}")
+    /*@Scheduled(initialDelayString = "${schedule.access.initialDelayString}", fixedDelayString = "${schedule.access.fixedDelayString}")
     public void access() {
 
         log.info("执行定时访问。");
@@ -60,5 +58,6 @@ public class AccessSchedule {
                 .articleIdentificationEnd(articleIdentificationEnd)
                 .build()
                 .process();
-    }
+    }*/
+
 }

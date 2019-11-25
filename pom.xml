@@ -10,7 +10,7 @@
     </parent>
     <groupId>indi.tudan</groupId>
     <artifactId>analog-access</artifactId>
-    <version>1.0</version>
+    <version>2.0</version>
     <name>analog-access</name>
     <description>模拟访问</description>
 
@@ -36,6 +36,20 @@
             <artifactId>hutool-all</artifactId>
             <version>5.0.6</version>
         </dependency>
+
+        <!-- start: htmlunit 依赖 -->
+        <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <version>2.36.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+        <!-- end: htmlunit 依赖 -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

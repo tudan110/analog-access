@@ -2,32 +2,49 @@
 csdn:
   # 博客主页
   blogPage:
+    # 用户名
+    userId: WTUDAN
     # 博客主页地址
-    url: https://tudan.blog.csdn.net
+    #url: https://tudan.blog.csdn.net
+    url: https://blog.csdn.net/${csdn.blogPage.userId}
     # 分页链接模板
     listUrlTemplate: ${csdn.blogPage.url}/article/list/{}?
     # 匹配 pageSize，前置特殊字符串
-    pageSizeStart: pageSize
+    pageSizeStart: 'pageSize'
     # 匹配 listTotal，前置特殊字符串
-    listTotalStart: listTotal
+    listTotalStart: 'listTotal'
     # 匹配 listTotal，后置特殊字符串
-    listTotalEnd: pageQueryStr
+    listTotalEnd: 'pageQueryStr'
   # 文章
   article:
     # 粗略匹配字符
     original:
-      start: class="article-item-box csdn-tracking-statistics"
-      end: <p class="content">
+      start: 'class="article-item-box csdn-tracking-statistics"'
+      end: '<p class="content">'
     # 精确匹配字符，因为有特殊字符，所有用单引号引起来 ''
     identification:
       start: '<a href="'
       end: '" target="_blank">'
 
+    # 文章链接过滤字符串
+    url:
+      filter: ${csdn.blogPage.userId},article/details
+
 # 定时器配置
 schedule:
-  initialDelayString: 0
-  fixedDelayString: 60000
+  # 更新文章链接
+  url:
+    # 延迟执行时间
+    initialDelayString: 0
+    # 执行间隔周期
+    fixedDelayString: 300000
+  # 模拟访问
+  access:
+    # 延迟执行时间
+    initialDelayString: 60000
+    # 执行间隔周期
+    fixedDelayString: 60000
 
 # 系统配置
 server:
-  port: 8888
+  port: 8887
