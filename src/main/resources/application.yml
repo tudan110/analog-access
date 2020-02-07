@@ -41,7 +41,7 @@ schedule:
   # 模拟访问
   access:
     # 延迟执行时间
-    initialDelayString: 60000
+    initialDelayString: 10
     # 执行间隔周期
     fixedDelayString: 60000
 

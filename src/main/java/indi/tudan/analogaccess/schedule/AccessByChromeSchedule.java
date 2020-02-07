@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * 访问定时器
+ * 方法二：使用 htmlunit 解析 html
  *
  * @author wangtan
  * @date 2019-11-25 16:55:15
@@ -36,14 +37,14 @@ public class AccessByChromeSchedule {
      * @date 2019-11-25 15:42:33
      * @since 2.0
      */
-    @Scheduled(initialDelayString = "${schedule.url.initialDelayString}", fixedDelayString = "${schedule.url.fixedDelayString}")
+    //@Scheduled(initialDelayString = "${schedule.url.initialDelayString}", fixedDelayString = "${schedule.url.fixedDelayString}")
     public void updateArticleUrlSet() {
 
         log.info("定时更新文章链接 Set。");
         articleUrlParser.process();
     }
 
-    @Scheduled(initialDelayString = "${schedule.access.initialDelayString}", fixedDelayString = "${schedule.access.fixedDelayString}")
+    //@Scheduled(initialDelayString = "${schedule.access.initialDelayString}", fixedDelayString = "${schedule.access.fixedDelayString}")
     public void access() {
 
         log.info("执行定时访问。");

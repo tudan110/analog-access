@@ -9,7 +9,9 @@ import lombok.experimental.Tolerate;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 模拟访问页面
@@ -55,14 +57,18 @@ public class AnalogAccess {
         // 获取分页页面 Url
         List<String> pageUrlList = getPageUrls();
 
+        // 文章链接 Set
+        Set<String> articleUrlSet = new HashSet<>();
+
         pageUrlList.forEach(pageUrl -> {
 
             // 获取文章链接
-            List<String> articleUrlList = getArticleUrls(pageUrl);
-
-            // 访问文章
-            articleUrlList.forEach(HttpUtil::get);
+            articleUrlSet.addAll(getArticleUrls(pageUrl));
         });
+
+        log.info("博主当前有 {} 篇文章，开始模拟访问 ...", articleUrlSet.size());
+        // 访问文章
+        articleUrlSet.forEach(HttpUtil::get);
 
     }
 
@@ -94,7 +100,7 @@ public class AnalogAccess {
             String pageUrl = StrUtil.format(listUrlTemplate, i + 1);
             pageUrlList.add(pageUrl);
 
-            log.info("分页页面链接 {}: {}", i + 1, pageUrl);
+            log.debug("分页页面链接 {}: {}", i + 1, pageUrl);
         }
 
         return pageUrlList;
@@ -107,10 +113,10 @@ public class AnalogAccess {
      * @return 文章链接数组
      * @date 2019-11-22 15:29:52
      */
-    private List<String> getArticleUrls(String pageUrl) {
+    private Set<String> getArticleUrls(String pageUrl) {
 
         // 文章链接数组
-        List<String> articleUrlList = new ArrayList<>();
+        Set<String> articleUrlSet = new HashSet<>();
 
         // 获取页面内容
         String htmlContent = HttpUtil.get(pageUrl);
@@ -138,11 +144,13 @@ public class AnalogAccess {
             htmlContent = htmlContent.substring(endIndex + articleOriginalEnd.length());
 
             // 添加到待文章链接数组中
-            articleUrlList.add(articleUrl);
+            articleUrlSet.add(articleUrl);
 
-            log.info("文章链接 {}: {}", i + 1, articleUrl);
+            log.debug("文章链接 {}: {}", i + 1, articleUrl);
         }
 
-        return articleUrlList;
+        log.debug("当前页解析到 {} 篇文章。", articleUrlSet.size());
+
+        return articleUrlSet;
     }
 }

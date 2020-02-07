@@ -1,11 +1,14 @@
 package indi.tudan.analogaccess.schedule;
 
+import indi.tudan.analogaccess.core.AnalogAccess;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
  * 访问定时器
+ * 方法一：自己解析 html
  *
  * @author wangtan
  * @date 2019-11-19 21:10:20
@@ -42,7 +45,7 @@ public class AccessSchedule {
     @Value("${csdn.article.identification.end}")
     private String articleIdentificationEnd;
 
-    /*@Scheduled(initialDelayString = "${schedule.access.initialDelayString}", fixedDelayString = "${schedule.access.fixedDelayString}")
+    @Scheduled(initialDelayString = "${schedule.access.initialDelayString}", fixedDelayString = "${schedule.access.fixedDelayString}")
     public void access() {
 
         log.info("执行定时访问。");
@@ -58,6 +61,6 @@ public class AccessSchedule {
                 .articleIdentificationEnd(articleIdentificationEnd)
                 .build()
                 .process();
-    }*/
+    }
 
 }
